@@ -153,23 +153,39 @@ async function run() {
                 res.send(result)
             }
         })
-        // getting the intensity data by range and descending it
-        app.get('/datas/intensity/range/:range/descending',async(req,res)=>{
-            const intensity = req.params.range;
-            const [lower, upper] = intensity.split('-');
+        
+        // app.get('/datas/intensity/range/:range/descending',async(req,res)=>{
+        //     const intensity = req.params.range;
+        //     const [lower, upper] = intensity.split('-');
+        //     const data = await datas.find().toArray();
+        //     const resultArray = data.filter(d =>
+        //     (
+        //         parseInt(lower) < parseInt(upper) ? parseInt(d.intensity) >= parseInt(lower) && parseInt(d.intensity) <= parseInt(upper) : parseInt(d.intensity) >= parseInt(upper) && parseInt(d.intensity) <= parseInt(lower)
+        //     )
+        //     )
+        //     const result = resultArray.sort((a, b) => b.intensity - a.intensity)
+        //     if (result.length === 0) {
+        //         res.send('No Data For This end year')
+        //     }
+        //     else {
+        //         res.send(result)
+        //     }
+        // })
+        app.get('/datas/relevance/:relevance', async (req, res) => {
+            const relevance = req.params.relevance;
             const data = await datas.find().toArray();
-            const resultArray = data.filter(d =>
+            const result = data.filter(d =>
             (
-                parseInt(lower) < parseInt(upper) ? parseInt(d.intensity) >= parseInt(lower) && parseInt(d.intensity) <= parseInt(upper) : parseInt(d.intensity) >= parseInt(upper) && parseInt(d.intensity) <= parseInt(lower)
+                parseInt(d.relevance) === parseInt(relevance)
             )
             )
-            const result = resultArray.sort((a, b) => b.intensity - a.intensity)
             if (result.length === 0) {
                 res.send('No Data For This end year')
             }
             else {
                 res.send(result)
             }
+
         })
         app.get('/datas/likelihood/:likelihood', async (req, res) => {
             const likelihood = req.params.likelihood;
@@ -187,16 +203,16 @@ async function run() {
             }
 
         })
-        app.get('/datas/likelihood/range/:range/descending',async(req,res)=>{
+        app.get('/datas/likelihood/range/:range',async(req,res)=>{
             const range = req.params.range;
-            const [lower, upper] = range.split('-').map(Number);
+            const [lower, upper] = range.split('-').map(Number); //making the array number
             const data = await datas.find().toArray();
             const resultArray = data.filter(d =>
             (
-                lower < upper ? d.likelihood >= lower && d.likelihood <= upper : d.likelihood >= parseInt(upper) && parseInt(d.intensity) <= parseInt(lower)
+                lower < upper ? d.likelihood >= lower && d.likelihood <= upper : d.likelihood >= upper && d.likelihood <= lower
             )
             )
-            const result = resultArray.sort((a, b) => b.intensity - a.intensity)
+            const result = resultArray.sort((a, b) => a.likelihood - b.likelihood)
             if (result.length === 0) {
                 res.send('No Data For This end year')
             }
@@ -204,7 +220,71 @@ async function run() {
                 res.send(result)
             }
         })
-        
+        app.get('/datas/pestle/:pestle', async (req, res) => {
+            const pestle = req.params.pestle;
+            const data = await datas.find().toArray();
+            const result = data.filter(d =>
+            (
+                parseInt(d.pestle) === pestle
+            )
+            )
+            if (result.length === 0) {
+                res.send('No Data For This end year')
+            }
+            else {
+                res.send(result)
+            }
+
+        })     
+        app.get('/datas/sector/:sector', async (req, res) => {
+            const sector = req.params.sector;
+            const data = await datas.find().toArray();
+            const result = data.filter(d =>
+            (
+                parseInt(d.sector) === sector
+            )
+            )
+            if (result.length === 0) {
+                res.send('No Data For This end year')
+            }
+            else {
+                res.send(result)
+            }
+
+        })     
+        app.get('/datas/topic/:topic', async (req, res) => {
+            const topic = req.params.topic;
+            const data = await datas.find().toArray();
+            const result = data.filter(d =>
+            (
+                parseInt(d.topic) === topic
+            )
+            )
+            if (result.length === 0) {
+                res.send('No Data For This end year')
+            }
+            else {
+                res.send(result)
+            }
+
+        })     
+        app.get('/datas/region/:region', async (req, res) => {
+            const region = req.params.region;
+            const data = await datas.find().toArray();
+            const result = data.filter(d =>
+            (
+                parseInt(d.region) === region
+            )
+            )
+            if (result.length === 0) {
+                res.send('No Data For This end year')
+            }
+            else {
+                res.send(result)
+            }
+
+        })     
+         
 
 
         await client.db("admin").command({ ping: 1 });
